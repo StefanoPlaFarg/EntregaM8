@@ -28,6 +28,11 @@ public class Rocket {
 		creationPropellers(numJetPropellers);
 	}
 	
+	public Rocket(String idCode, float[] listJetMaxPower) {
+		this.idCode=idCode;
+		creationPropellers(listJetMaxPower);
+	}
+	
 	private void creationPropellers(int numJetPropellers) {
 		
 		for (int i = 0; i< numJetPropellers; i++) {
@@ -35,6 +40,15 @@ public class Rocket {
 			addJetPropeller();
 		}
 		
+	}
+	
+	private void creationPropellers(float[] listJetMaxPower) {
+
+		for (int i = 0; i < listJetMaxPower.length; i++) {
+
+			addJetPropeller(listJetMaxPower[i]);
+		}
+
 	}
 	
 	public void setIdCode(String idCode) {
@@ -48,6 +62,10 @@ public class Rocket {
 	
 	public void addJetPropeller() {
 		listPropellers.add(new JetPropeller());
+	}
+	
+	public void addJetPropeller(float jetMaxPower) {
+		listPropellers.add(new JetPropeller(jetMaxPower));
 	}
 		
 	public int getNumberJetPropellers() {
