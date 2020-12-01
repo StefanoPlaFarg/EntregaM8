@@ -12,19 +12,19 @@ public class JetPropeller {
 	
 	private float jetMaxPower;
 	
-	public void JetPropeller() {
+	public JetPropeller() {
 		jetMaxPower= 0;
 	}
 	
-	public void JetPropeller(float jetMaxPower) {
+	public  JetPropeller(float jetMaxPower) {
 		this.jetMaxPower= jetMaxPower;
 	}
 	
-	public void setJetmaxPower(float jetMaxPower) {
+	public void setJetMaxPower(float jetMaxPower) {
 		this.jetMaxPower= jetMaxPower;
 	}
 	
-	public float getJetmaxPower() {
+	public float getJetMaxPower() {
 		return jetMaxPower;
 	}
 	
