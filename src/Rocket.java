@@ -28,6 +28,15 @@ public class Rocket {
 		this.idCode=idCode;
 	}
 	
+	private void creationPropellers(int numJetPropellers) {
+		
+		for (int i = 0; i< numJetPropellers; i++) {
+			
+			addJetPropeller();
+		}
+		
+	}
+	
 	public void setIdCode(String idCode) {
 		this.idCode=idCode;
 	}
