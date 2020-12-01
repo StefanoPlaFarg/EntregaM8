@@ -41,6 +41,10 @@ public class Rocket {
 		this.idCode=idCode;
 	}
 	
+	public String getIdCode() {
+		return idCode;
+	}
+	
 	
 	public void addJetPropeller() {
 		listPropellers.add(new JetPropeller());
