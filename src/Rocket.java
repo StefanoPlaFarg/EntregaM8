@@ -25,7 +25,7 @@ public class Rocket {
 	
 	public Rocket(String idCode, int numJetPropellers) {
 		this.idCode=idCode;
-		this.idCode=idCode;
+		creationPropellers(numJetPropellers);
 	}
 	
 	private void creationPropellers(int numJetPropellers) {
