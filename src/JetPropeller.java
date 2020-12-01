@@ -10,5 +10,7 @@ import java.util.ArrayList;
  */
 public class JetPropeller {
 	
-	
+	public void JetPropeller() {
+		
+	}
 }
