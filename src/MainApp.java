@@ -12,11 +12,12 @@ public class MainApp {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-		Rocket rocket1 = new Rocket ("32WESSDS",3);
-		Rocket rocket2 = new Rocket ("LDSFJA32",6);
-		System.out.format("El codi del primer cohet és: %s i disposa de: %d propulsors %n",rocket1.getIdCode(),rocket1.getNumberJetPropellers() );
-		System.out.format("El codi del segon cohet és: %s i disposa de: %d propulsors",rocket2.getIdCode(),rocket2.getNumberJetPropellers() );
+		float listMaxPower1[]= {10,30,80};
+		float listMaxPower2[]= {30,40,50,50,30,10};
+		Rocket rocket1 = new Rocket ("32WESSDS",listMaxPower1);
+		Rocket rocket2 = new Rocket ("LDSFJA32",listMaxPower2);
+		System.out.format("%s: %s %n",rocket1.getIdCode(),rocket1.getListJetMaxPowers() );
+		System.out.format("%s: %s %n",rocket2.getIdCode(),rocket2.getListJetMaxPowers() );
 
 	}
 

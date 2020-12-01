@@ -72,4 +72,16 @@ public class Rocket {
 		 return listPropellers.size();
 	}
 
+	public String getListJetMaxPowers() {
+		
+		String listJetMaxPower="[ ";
+		for (JetPropeller jetPropeller:listPropellers) {
+			listJetMaxPower= listJetMaxPower+ Float.toString(jetPropeller.getJetMaxPower())+" ";
+			
+		}
+		
+		listJetMaxPower=listJetMaxPower+"]";
+		 return listJetMaxPower;
+	}
+	
 }
