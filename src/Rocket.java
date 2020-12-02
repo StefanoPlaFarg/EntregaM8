@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class Rocket {
 	
+	
 	private String idCode;
 	private List<JetPropeller> listPropellers = new ArrayList<JetPropeller>();
 	
@@ -83,5 +84,8 @@ public class Rocket {
 		listJetMaxPower=listJetMaxPower+"]";
 		 return listJetMaxPower;
 	}
+	
+
+	
 	
 }
