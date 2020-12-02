@@ -12,12 +12,39 @@ public class MainApp {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		float listMaxPower1[]= {10,30,80};
-		float listMaxPower2[]= {30,40,50,50,30,10};
-		Rocket rocket1 = new Rocket ("32WESSDS",listMaxPower1);
-		Rocket rocket2 = new Rocket ("LDSFJA32",listMaxPower2);
-		System.out.format("%s: %s %n",rocket1.getIdCode(),rocket1.getListJetMaxPowers() );
-		System.out.format("%s: %s %n",rocket2.getIdCode(),rocket2.getListJetMaxPowers() );
+		
+		double listMaxPower[] = { 10, 30, 80 };
+		double listTargetPower[] = { 5, 15, 40 };
+		Rocket rocket1 = new Rocket("32WESSDS", listMaxPower);
+
+		System.out.format("%s: List Max Power: %s %n", rocket1.getIdCode(), rocket1.getListJetMaxPowers());
+
+		try {
+			rocket1.setTargetPowerToPropellers(listTargetPower);
+			System.out.format("%s: List Target Power: %s %n", rocket1.getIdCode(), rocket1.getListTargetJetPowers());
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		try {
+			System.out.println("Launching Rocket1");
+			rocket1.startPropellers();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		/*
+		 * try { System.out.println ("Finishing program");
+		 * rocket1.killThreadsJetPropellers();
+		 * 
+		 * }catch(Exception e) {
+		 * 
+		 * e.printStackTrace(); }
+		 */
 
 	}
 

@@ -29,9 +29,9 @@ public class Rocket {
 		creationPropellers(numJetPropellers);
 	}
 	
-	public Rocket(String idCode, float[] listJetMaxPower) {
+	public Rocket(String idCode, double[] listJetMaxPower) {
 		this.idCode=idCode;
-		creationPropellers(listJetMaxPower);
+		creationPropellersWithMaxPower(listJetMaxPower);
 	}
 	
 	private void creationPropellers(int numJetPropellers) {
@@ -43,7 +43,7 @@ public class Rocket {
 		
 	}
 	
-	private void creationPropellers(float[] listJetMaxPower) {
+	private void creationPropellersWithMaxPower(double[] listJetMaxPower) {
 
 		for (int i = 0; i < listJetMaxPower.length; i++) {
 
@@ -51,6 +51,93 @@ public class Rocket {
 		}
 
 	}
+	
+	public void setTargetPowerToPropellers(double[] listTargetPowerPropeller) throws Exception{
+		
+		if (listPropellers==null  ) {//No jetPropellers stored
+			
+			throw new Exception ("No jetPropellers stored");
+			
+		}else if ((listPropellers.size() != listTargetPowerPropeller.length  )) {//The size of the List and the Array are different
+			throw new Exception ("The size of the list of max power of propellers is different than the one of list of target powers");
+			
+		}else {//The size of the List and the Array are the same
+					
+			int count =0;
+			
+			for (JetPropeller jetPropeller:listPropellers) {
+				
+				if (listTargetPowerPropeller[count] <= jetPropeller.getJetMaxPower()) {
+					
+					jetPropeller.setTargetJetPower(listTargetPowerPropeller[count]);
+					count++;
+					
+				}else {
+					
+					throw new Exception ("At least one target power of one of the propeller list exceeds its respective max power");
+					
+				}
+				
+			}
+			
+		}	
+		
+	}
+	
+	
+	public void startPropellers ()throws Exception {
+		
+             if (listPropellers==null  ) {//No jetPropellers stored
+			
+			throw new Exception ("No jetPropellers stored");
+			
+             }else {
+            	 
+					for (JetPropeller jetPropeller : listPropellers) {//setting states of the set of Jet Propellers
+
+						if (jetPropeller.getCurrentJetPower() == jetPropeller.getTargetJetPower()) {
+
+							jetPropeller.setStatePropeller("nothing");
+							
+						} else if (jetPropeller.getCurrentJetPower() < jetPropeller.getTargetJetPower()) {
+
+							jetPropeller.setStatePropeller("acceleration");
+						} else {
+
+							jetPropeller.setStatePropeller("deceleration");
+						}
+
+					}
+					
+					
+					for (JetPropeller jetPropeller : listPropellers) {//Starting the set of Jet Propellers
+						
+						jetPropeller.start();
+						
+					}
+            	 
+             }
+		
+		
+		
+	}
+	
+	public void killThreadsJetPropellers() throws Exception{
+           if (listPropellers==null  ) {//No jetPropellers stored
+			
+			throw new Exception ("No jetPropellers stored");
+           }else {
+          	 
+				for (JetPropeller jetPropeller : listPropellers) {
+					
+					jetPropeller.setStatePropeller("dead");
+					
+				}
+					
+           }
+           
+	}
+	
 	
 	public void setIdCode(String idCode) {
 		this.idCode=idCode;
@@ -65,7 +152,7 @@ public class Rocket {
 		listPropellers.add(new JetPropeller());
 	}
 	
-	public void addJetPropeller(float jetMaxPower) {
+	public void addJetPropeller(double jetMaxPower) {
 		listPropellers.add(new JetPropeller(jetMaxPower));
 	}
 		
@@ -77,7 +164,7 @@ public class Rocket {
 		
 		String listJetMaxPower="[ ";
 		for (JetPropeller jetPropeller:listPropellers) {
-			listJetMaxPower= listJetMaxPower+ Float.toString(jetPropeller.getJetMaxPower())+" ";
+			listJetMaxPower= listJetMaxPower+ Double.toString(jetPropeller.getJetMaxPower())+" ";
 			
 		}
 		
@@ -86,6 +173,17 @@ public class Rocket {
 	}
 	
 
+    public String getListTargetJetPowers() {
+		
+		String listTargetJetPowers="[ ";
+		for (JetPropeller jetPropeller:listPropellers) {
+			listTargetJetPowers= listTargetJetPowers+ Double.toString(jetPropeller.getTargetJetPower())+" ";
+			
+		}
+		
+		listTargetJetPowers=listTargetJetPowers+"]";
+		 return listTargetJetPowers;
+	}
 	
 	
 }

@@ -16,6 +16,7 @@ public class JetPropeller extends Thread {
 	private String statePropeller;
 	
 	public JetPropeller() {
+		currentJetPower=0;
 		jetMaxPower= 0;
 		statePropeller="nothing";
 	}
@@ -50,7 +51,7 @@ public class JetPropeller extends Thread {
 	/**
 	 * @param targetJetPower the targetJetPower to set
 	 */
-	public void setTargetJetPower(float targetJetPower) {
+	public void setTargetJetPower(double targetJetPower) {
 		this.targetJetPower = targetJetPower;
 	}
 
@@ -66,7 +67,7 @@ public class JetPropeller extends Thread {
 	/**
 	 * @param currentJetPower the currentJetPower to set
 	 */
-	public void setCurrentJetPower(float currentJetPower) {
+	public void setCurrentJetPower(double currentJetPower) {
 		this.currentJetPower = currentJetPower;
 	}
 
@@ -86,14 +87,25 @@ public class JetPropeller extends Thread {
 		while (!getStatePropeller().equals("dead")) {
 			
 			if (getStatePropeller().equals("acceleration")) {
+				printThreadPowerStatus();
 				accelerateToTargetPower();
-				isTargetPowerReached();
+				if (isTargetPowerReached()) {
+					printThreadPowerStatus();
+				}
+				
+				
+				
 			} else if (getStatePropeller().equals("deceleration")) {
+				printThreadPowerStatus();
 				decelerateToTargetPower();
-				isTargetPowerReached();
-
+				if (isTargetPowerReached()) {
+					printThreadPowerStatus();
+				}
+				
+				
+				
 			} else if (getStatePropeller().equals("nothing")) {// Thread sleep
-				setStatePropeller("nothing");
+				//setStatePropeller("nothing");
 			} else {// Kill Thread
 				setStatePropeller("dead");
 			}
@@ -102,13 +114,13 @@ public class JetPropeller extends Thread {
 	}
 	
 	private void accelerateToTargetPower() {
-		System.out.println ("Thread: " + Thread.currentThread().getId() + "Current power: " + currentJetPower + "Target power: " + targetJetPower);
+		
 		
 		if (difference (targetJetPower,currentJetPower)>=1) {
 			currentJetPower=currentJetPower+1;			
 			
 			try {
-				Thread.sleep(500);
+				Thread.sleep(1000);
 			} catch (InterruptedException e){
 				e.printStackTrace();
 			}
@@ -123,7 +135,7 @@ public class JetPropeller extends Thread {
 	}
 	
    private void decelerateToTargetPower() {
-	   System.out.println ("Thread: " + Thread.currentThread().getId() + "Current power: " + currentJetPower + "Target power: " + targetJetPower);
+	   
 		
 	   if (difference (targetJetPower,currentJetPower)<=1) {
 			currentJetPower=currentJetPower-1;
@@ -163,6 +175,11 @@ public class JetPropeller extends Thread {
 		}
 
 		return TargetPowerReached;
+	}
+	
+	private void printThreadPowerStatus() {
+		System.out.println ("Thread: " + Thread.currentThread().getId()+" " + "Current power: " + currentJetPower + " " +"Target power: " + targetJetPower);
+		
 	}
 	
 	
