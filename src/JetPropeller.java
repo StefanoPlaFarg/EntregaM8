@@ -10,24 +10,32 @@ import java.util.ArrayList;
  */
 public class JetPropeller extends Thread {
 	
-	private float currentJetPower;
-	private float targetJetPower;
-	private float jetMaxPower;
+	private double currentJetPower;
+	private double targetJetPower;
+	private double jetMaxPower;
 	private String statePropeller;
 	
 	public JetPropeller() {
 		jetMaxPower= 0;
+		statePropeller="nothing";
 	}
 	
-	public  JetPropeller(float jetMaxPower) {
+	public  JetPropeller(double jetMaxPower) {
+		this();
+		this.jetMaxPower= jetMaxPower;
+		
+	}
+	
+	public JetPropeller(double jetMaxPower, String  statePropeller ) {
+		this.jetMaxPower= jetMaxPower;
+		this.statePropeller=statePropeller;
+	}
+	
+	public void setJetMaxPower(double jetMaxPower) {
 		this.jetMaxPower= jetMaxPower;
 	}
 	
-	public void setJetMaxPower(float jetMaxPower) {
-		this.jetMaxPower= jetMaxPower;
-	}
-	
-	public float getJetMaxPower() {
+	public double getJetMaxPower() {
 		return jetMaxPower;
 	}
 	
@@ -35,7 +43,7 @@ public class JetPropeller extends Thread {
 	/**
 	 * @return the targetJetPower
 	 */
-	public float getTargetJetPower() {
+	public double getTargetJetPower() {
 		return targetJetPower;
 	}
 
@@ -51,7 +59,7 @@ public class JetPropeller extends Thread {
 	/**
 	 * @return the currentJetPower
 	 */
-	public float getCurrentJetPower() {
+	public double getCurrentJetPower() {
 		return currentJetPower;
 	}
 
@@ -74,26 +82,88 @@ public class JetPropeller extends Thread {
 	
 	@Override
 	public void run() {
-		
-		if (getStatePropeller().equals("acceleration")) {
-			accelerate(); 
-			isTargetPowerReached();
-		}else if (getStatePropeller().equals("deceleration")) {
-			decelerate();
-			isTargetPowerReached();
+
+		while (!getStatePropeller().equals("dead")) {
 			
-		}else {
-			//Do nothing
+			if (getStatePropeller().equals("acceleration")) {
+				accelerateToTargetPower();
+				isTargetPowerReached();
+			} else if (getStatePropeller().equals("deceleration")) {
+				decelerateToTargetPower();
+				isTargetPowerReached();
+
+			} else if (getStatePropeller().equals("nothing")) {// Thread sleep
+				setStatePropeller("nothing");
+			} else {// Kill Thread
+				setStatePropeller("dead");
+			}
+		}
+
+	}
+	
+	private void accelerateToTargetPower() {
+		System.out.println ("Thread: " + Thread.currentThread().getId() + "Current power: " + currentJetPower + "Target power: " + targetJetPower);
+		
+		if (difference (targetJetPower,currentJetPower)>=1) {
+			currentJetPower=currentJetPower+1;			
+			
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e){
+				e.printStackTrace();
+			}
+			
 		}
 		
-	private void acclerate 	()
+		else {
+			
+			currentJetPower=currentJetPower + difference (targetJetPower,currentJetPower);
+			
+		}
+	}
 	
-	
+   private void decelerateToTargetPower() {
+	   System.out.println ("Thread: " + Thread.currentThread().getId() + "Current power: " + currentJetPower + "Target power: " + targetJetPower);
+		
+	   if (difference (targetJetPower,currentJetPower)<=1) {
+			currentJetPower=currentJetPower-1;
+		}
+		
+		else {
+			
+			currentJetPower=currentJetPower + difference (targetJetPower,currentJetPower);
+			
+		}
 		
 	}
 	
-	
-	
+	private double difference(double targetJetPower, double currentJetPower) {
+
+		return targetJetPower - currentJetPower;
+	}
+   
+	private boolean isTargetPowerReached() {
+		boolean TargetPowerReached = false;
+
+		if (currentJetPower == targetJetPower) {
+
+			statePropeller = "nothing";
+			TargetPowerReached = true;
+
+		} else if (currentJetPower < targetJetPower) {
+
+			statePropeller = "acceleration";
+			TargetPowerReached = false;
+
+		} else if (currentJetPower > targetJetPower) {
+
+			statePropeller = "deceleration";
+			TargetPowerReached = false;
+
+		}
+
+		return TargetPowerReached;
+	}
 	
 	
 }
