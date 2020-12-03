@@ -13,15 +13,21 @@ public class MainApp {
 	 */
 	public static void main(String[] args) {
 		
-		double listMaxPower[] = { 10, 30, 80 };
-		double listTargetPower[] = { 5, 15, 40 };
-		Rocket rocket1 = new Rocket("32WESSDS", listMaxPower);
+		
+		double listMaxPower[] = { 80, 30, 10 };
+		
+		Rocket rocket = new Rocket("32WESSDS", listMaxPower);
 
-		System.out.format("%s: List Max Power: %s %n", rocket1.getIdCode(), rocket1.getListJetMaxPowers());
+		System.out.format("%s: Max Power Propeller List: %s %n", rocket.getIdCode(), rocket.getListJetMaxPowers());
 
+		
+		rocket.setCurrentSpeed(0);
+		rocket.setTargetSpeed(200);
+		System.out.format("%s: Current Speed: %f Target Speed: %f %n",rocket.getIdCode(), rocket.getCurrentSpeed(), rocket.getTargetSpeed());
+		
 		try {
-			rocket1.setTargetPowerToPropellers(listTargetPower);
-			System.out.format("%s: List Target Power: %s %n", rocket1.getIdCode(), rocket1.getListTargetJetPowers());
+			rocket.setTotalPowerToPropellers(rocket.getTargetSpeed());
+			System.out.format("%s: Target Power Propeller List: %s %n", rocket.getIdCode(), rocket.getListTargetJetPowers());
 
 		} catch (Exception e) {
 
@@ -29,22 +35,33 @@ public class MainApp {
 		}
 
 		try {
-			System.out.println("Launching Rocket1");
-			rocket1.startPropellers();
+			System.out.println("Launching Rocket");
+			rocket.startPropellers();
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
+         
+		
+		while (rocket.sumCurrentPowerAllJetPropellers()<rocket.getTotalPower()) {
+			
+			//rocket.updateCurrentSpeed();
+			//System.out.println("Current Speed: " + rocket.getCurrentSpeed());
+		}
+		
+				
+		try {			
+			rocket.killThreadsJetPropellers();
+			
+		} catch (Exception e) {
 
-		/*
-		 * try { System.out.println ("Finishing program");
-		 * rocket1.killThreadsJetPropellers();
-		 * 
-		 * }catch(Exception e) {
-		 * 
-		 * e.printStackTrace(); }
-		 */
+			e.printStackTrace();
+		}
+		
+	     rocket.updateCurrentSpeed();
+		System.out.println("The current speed is: " + rocket.getCurrentSpeed());
+		//System.out.println("The program is over");
 
 	}
 

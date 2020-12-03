@@ -14,17 +14,24 @@ public class Rocket {
 	
 	private String idCode;
 	private List<JetPropeller> listPropellers = new ArrayList<JetPropeller>();
-	
+	private double currentSpeed;
+	private double targetSpeed;
+	private double totalPower;
 	
 	public Rocket() {
-
+		idCode="";
+		currentSpeed=0;
+		targetSpeed=0;
+		totalPower =0;
 	}
 	
 	public Rocket(String idCode) {
-    this.idCode=idCode;
+		this();
+		this.idCode=idCode;
 	}
 	
 	public Rocket(String idCode, int numJetPropellers) {
+		this();
 		this.idCode=idCode;
 		creationPropellers(numJetPropellers);
 	}
@@ -84,6 +91,7 @@ public class Rocket {
 		
 	}
 	
+
 	
 	public void startPropellers ()throws Exception {
 		
@@ -95,6 +103,8 @@ public class Rocket {
             	 
 					for (JetPropeller jetPropeller : listPropellers) {//setting states of the set of Jet Propellers
 
+						jetPropeller.setThreadAlive(true);
+						
 						if (jetPropeller.getCurrentJetPower() == jetPropeller.getTargetJetPower()) {
 
 							jetPropeller.setStatePropeller("nothing");
@@ -130,7 +140,7 @@ public class Rocket {
           	 
 				for (JetPropeller jetPropeller : listPropellers) {
 					
-					jetPropeller.setStatePropeller("dead");
+					jetPropeller.setThreadAlive(false);
 					
 				}
 					
@@ -147,6 +157,138 @@ public class Rocket {
 		return idCode;
 	}
 	
+	
+	/**
+	 * @return the currentSpeed
+	 */
+	public double getCurrentSpeed() {
+		return currentSpeed;
+	}
+
+	/**
+	 * @param currentSpeed the currentSpeed to set
+	 */
+	public void setCurrentSpeed(double currentSpeed) {
+		this.currentSpeed = currentSpeed;
+	}
+
+	
+	/**
+	 * @return the targetSpeed
+	 */
+	public double getTargetSpeed() {
+		return targetSpeed;
+	}
+
+	/**
+	 * @param targetSpeed the targetSpeed to set
+	 */
+	public void setTargetSpeed(double targetSpeed) {
+		this.targetSpeed = targetSpeed;
+	}
+
+	/**
+	 * @return the totalPower
+	 */
+	public double getTotalPower() {
+		return totalPower;
+	}
+
+	/**
+	 * @param totalPower the totalPower to set
+	 */
+	public void setTotalPower(double totalPower) {
+		this.totalPower = totalPower;
+	}
+
+	
+	
+	public void setTotalPowerToPropellers(double targetSpeed) throws Exception {
+
+		if (listPropellers == null) {// No jetPropellers stored
+
+			throw new Exception("No jetPropellers stored");
+
+		} else {
+
+			this.targetSpeed = targetSpeed;
+			double countTotalPower = calcTotalPower();
+			if (countTotalPower <= sumMaxPowerAllJetPropellers()) {
+
+				for (JetPropeller jetPropeller : listPropellers) {
+
+					if (jetPropeller.getJetMaxPower() <= countTotalPower) {
+						jetPropeller.setTargetJetPower(jetPropeller.getJetMaxPower());
+
+						countTotalPower = countTotalPower - jetPropeller.getJetMaxPower();
+
+					} else {
+
+						jetPropeller.setTargetJetPower(countTotalPower);
+						countTotalPower = 0;
+					}
+
+				}
+
+			} else {//countTotalPower > sumMaxPowerAllJetPropellers()
+
+				throw new Exception("Rocket has not enough power to lunch itself");
+			}
+
+		}
+
+	}
+	
+	private double calcTotalPower() {
+		this.totalPower= (double) Math.pow(((this.currentSpeed-this.targetSpeed)/100),2);
+		
+		return totalPower;
+	}
+	
+	private double sumMaxPowerAllJetPropellers() {
+
+		double sumPower = 0;
+
+		for (JetPropeller jetPropeller : listPropellers) {
+
+			sumPower = sumPower + jetPropeller.getJetMaxPower();
+
+		}
+
+		return sumPower;
+
+	}	
+	
+	public double sumCurrentPowerAllJetPropellers() {
+
+		double sumPower = 0;
+
+		for (JetPropeller jetPropeller : listPropellers) {
+
+			sumPower = sumPower + jetPropeller.getCurrentJetPower();
+
+		}
+
+		return sumPower;
+
+	}	
+	
+	
+	
+	
+	
+	
+	public void updateCurrentSpeed() {
+		double currentPower = 0;
+
+		for (JetPropeller jetPropeller : listPropellers) {
+
+			currentPower = currentPower + jetPropeller.getCurrentJetPower();
+		}
+
+		setCurrentSpeed(getCurrentSpeed() + 100 * (Math.sqrt(currentPower)));
+
+	}
 	
 	public void addJetPropeller() {
 		listPropellers.add(new JetPropeller());

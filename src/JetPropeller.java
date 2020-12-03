@@ -3,6 +3,7 @@
  */
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author stefano
@@ -14,11 +15,13 @@ public class JetPropeller extends Thread {
 	private double targetJetPower;
 	private double jetMaxPower;
 	private String statePropeller;
+	private AtomicBoolean threadAlive  ;
 	
 	public JetPropeller() {
 		currentJetPower=0;
 		jetMaxPower= 0;
 		statePropeller="nothing";
+		threadAlive = new AtomicBoolean(false);
 	}
 	
 	public  JetPropeller(double jetMaxPower) {
@@ -32,6 +35,20 @@ public class JetPropeller extends Thread {
 		this.statePropeller=statePropeller;
 	}
 	
+	/**
+	 * @return the threadAlive
+	 */
+	public boolean getThreadAlive() {
+		return threadAlive.get();
+	}
+
+	/**
+	 * @param threadAlive the threadAlive to set
+	 */
+	public void setThreadAlive(boolean threadAlive) {
+		this.threadAlive.set(threadAlive);
+	}
+
 	public void setJetMaxPower(double jetMaxPower) {
 		this.jetMaxPower= jetMaxPower;
 	}
@@ -84,7 +101,7 @@ public class JetPropeller extends Thread {
 	@Override
 	public void run() {
 
-		while (!getStatePropeller().equals("dead")) {
+		while (getThreadAlive()) {
 			
 			if (getStatePropeller().equals("acceleration")) {
 				printThreadPowerStatus();
@@ -106,9 +123,8 @@ public class JetPropeller extends Thread {
 				
 			} else if (getStatePropeller().equals("nothing")) {// Thread sleep
 				//setStatePropeller("nothing");
-			} else {// Kill Thread
-				setStatePropeller("dead");
-			}
+				
+			} 
 		}
 
 	}
